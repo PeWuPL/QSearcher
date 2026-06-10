@@ -350,7 +350,7 @@ const answerText = document.getElementById("answerText");
 // sprawi, że podczas wyszukiwania polskie znaki zarówno z bazy pytań jak i z pola wprowadzania
 // będą w locie zamieniane na odpowiedniki z alfabetu łacińskiego (polskie znaki będą widoczne
 // normalnie, lecz wyszukiwanie będzie je interpretować jako łacińskie odpowiedniki)
-const removeDiactricts = true;
+const enableDiacriticsRemoval = true;
 
 // Funkcja usuwająca polskie znaki. Polskie ł i Ł wymagają osobnej zamiany
 function removeDiacritics(str) {
@@ -383,72 +383,64 @@ getCurrentTab().then(tab=>{
 
 // Wyszukiwanie pytań
 searchInput.addEventListener("input", (e) => {
-    const searchTerm = removeDiactricts
-        ? removeDiacritics(e.target.value.toLowerCase())
-        : e.target.value.toLowerCase();
+  const searchTerm = removeDiacritics(e.target.value.toLowerCase())
+
+  resultsDiv.innerHTML = "";
 
   if (searchTerm === "") return;
 
   const filteredQuestions = qaDatabase.filter(item => {
-    const questionText = removeDiactricts
-        ? removeDiacritics(item.question.toLowerCase())
-        : item.question.toLowerCase();
+    const questionText = enableDiacriticsRemoval ? removeDiacritics(item.question.toLowerCase()) : item.question.toLowerCase();
     return questionText.includes(searchTerm);
   });
-	
+
   const filteredAnswers = qaDatabase.filter(item => {
-    const answerTextContent = removeDiactricts
-        ? removeDiacritics(item.answer.toLowerCase())
-        : item.answer.toLowerCase();
-    return answerTextContent.includes(searchTerm);
+    const answerText = enableDiacriticsRemoval ? removeDiacritics(item.question.toLowerCase()) : item.question.toLowerCase();
+    return answerText.includes(searchTerm)
   });
   
-  if (filteredQuestions.length === 0 && filteredAnswers.length === 0) 
-  {
+  if (filteredQuestions.length === 0 && filteredAnswers.length === 0) {
     resultsDiv.innerHTML = "<p>Brak wyników</p>";
     return;
   }
   
   //dodaje do resulta question, a po kliknięciu pokazuje answer
-  filteredQuestions.forEach
-  (
-  item => 
-	  {
-		const questionDiv = document.createElement("div");
-		questionDiv.className = "question";
-		questionDiv.textContent = item.question;
-		questionDiv.addEventListener
-		("click", () => 
-			{
-			  //answerText.textContent = item.answer;
-			  answerText.innerHTML = item.answer.replace(/\n/g, "<br>");
-			  answerContainer.style.display = "block";
-			}
-		);
-		resultsDiv.appendChild(questionDiv);
-	  }
+  filteredQuestions.forEach(
+    item => {
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question";
+        questionDiv.textContent = item.question;
+        questionDiv.addEventListener
+        ("click", () =>
+          {
+            //answerText.textContent = item.answer;
+            answerText.innerHTML = item.answer.replace(/\n/g, "<br>");
+            answerContainer.style.display = "block";
+          }
+        );
+        resultsDiv.appendChild(questionDiv);
+      }
   );
   
   //dodaje do resulta answer, a po kliknięciu pokazuje oryginalny question
-  filteredAnswers.forEach
-  (
-  item => 
-	  {
-		const answerDiv = document.createElement("div");
-		answerDiv.className = "answer";
-		//answerDiv.textContent = item.answer;
-		answerDiv.innerHTML = item.answer.replace(/\n/g, "<br>");
-		answerDiv.style.fontStyle = "italic";
-		answerDiv.style.color = "rgb(255, 180, 0)";
-		answerDiv.addEventListener
-		("click", () => 
-			{
-			  //answerText.textContent = item.question;
-			  answerText.innerHTML = item.question.replace(/\n/g, "<br>");
-			  answerContainer.style.display = "block";
-			}
-		);
-		resultsDiv.appendChild(answerDiv);
-	  }
-  ); 
+  filteredAnswers.forEach(
+    item =>
+        {
+          const answerDiv = document.createElement("div");
+          answerDiv.className = "answer";
+          //answerDiv.textContent = item.answer;
+          answerDiv.innerHTML = item.answer.replace(/\n/g, "<br>");
+          answerDiv.style.fontStyle = "italic";
+          answerDiv.style.color = "rgb(255, 180, 0)";
+          answerDiv.addEventListener
+          ("click", () =>
+              {
+                //answerText.textContent = item.question;
+                answerText.innerHTML = item.question.replace(/\n/g, "<br>");
+                answerContainer.style.display = "block";
+              }
+          );
+          resultsDiv.appendChild(answerDiv);
+        }
+    );
 });
