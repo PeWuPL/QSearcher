@@ -347,6 +347,21 @@ const resultsDiv = document.getElementById("results");
 const answerContainer = document.getElementById("answerContainer");
 const answerText = document.getElementById("answerText");
 
+// sprawi, że podczas wyszukiwania polskie znaki zarówno z bazy pytań jak i z pola wprowadzania
+// będą w locie zamieniane na odpowiedniki z alfabetu łacińskiego (polskie znaki będą widoczne
+// normalnie, lecz wyszukiwanie będzie je interpretować jako łacińskie odpowiedniki)
+const removeDiactricts = true;
+
+// Funkcja usuwająca polskie znaki. Polskie ł i Ł wymagają osobnej zamiany
+function removeDiacritics(str) {
+    //str = "Żółw"
+    return str
+        .replace(/ł/g, "l") //str = "Żólw"
+        .replace(/Ł/g, "L")
+        .normalize("NFD") //str = "Z.o`lw"
+        .replace(/[\u0300-\u036f]/g, ""); //str = "Zolw"
+}
+
 //domyślny focus
 if (searchInput) {
     searchInput.focus();
@@ -368,19 +383,25 @@ getCurrentTab().then(tab=>{
 
 // Wyszukiwanie pytań
 searchInput.addEventListener("input", (e) => {
-  const searchTerm = e.target.value.toLowerCase();
-  resultsDiv.innerHTML = "";
+    const searchTerm = removeDiactricts
+        ? removeDiacritics(e.target.value.toLowerCase())
+        : e.target.value.toLowerCase();
 
   if (searchTerm === "") return;
 
-  const filteredQuestions = qaDatabase.filter
-  (
-  item => item.question.toLowerCase().includes(searchTerm)
-  ); 
-  const filteredAnswers = qaDatabase.filter
-  (
-  item => item.answer.toLowerCase().includes(searchTerm)
-  );
+  const filteredQuestions = qaDatabase.filter(item => {
+    const questionText = removeDiactricts
+        ? removeDiacritics(item.question.toLowerCase())
+        : item.question.toLowerCase();
+    return questionText.includes(searchTerm);
+  });
+	
+  const filteredAnswers = qaDatabase.filter(item => {
+    const answerTextContent = removeDiactricts
+        ? removeDiacritics(item.answer.toLowerCase())
+        : item.answer.toLowerCase();
+    return answerTextContent.includes(searchTerm);
+  });
   
   if (filteredQuestions.length === 0 && filteredAnswers.length === 0) 
   {
