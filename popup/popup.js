@@ -348,10 +348,24 @@ const answerContainer = document.getElementById("answerContainer");
 const answerText = document.getElementById("answerText");
 
 //domyślny focus
-if (searchInput) 
-{
+if (searchInput) {
     searchInput.focus();
 }
+
+async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    // `tab` will either be a `tabs.Tab` instance or `undefined`.
+    let [tab] = await chrome.tabs.query(queryOptions);
+    return tab;
+}
+
+getCurrentTab().then(tab=>{
+  chrome.tabs.sendMessage(tab.id, {method: "getSelection"}, function(response){
+
+    searchInput.value = response.body;
+  });
+});
+
 // Wyszukiwanie pytań
 searchInput.addEventListener("input", (e) => {
   const searchTerm = e.target.value.toLowerCase();

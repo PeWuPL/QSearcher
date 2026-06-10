@@ -4,6 +4,13 @@
   "author": "Gal Anonym, who knows, will know.",
   "version": "1.2",
   "description": "Question searcher",
+  "permissions": [ "http://*/*", "https://*/*", "tabs" ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["popup/content_script.js"]
+    }
+  ],
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": "icons/icon16.png"
