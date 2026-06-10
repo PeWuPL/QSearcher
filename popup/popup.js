@@ -377,14 +377,21 @@ async function getCurrentTab() {
 getCurrentTab().then(tab=>{
   chrome.tabs.sendMessage(tab.id, {method: "getSelection"}, function(response){
 
+    if(!response)
+      return;
     searchInput.value = response.body;
+    lookupPhrase(enableDiacriticsRemoval ? removeDiacritics(response.body) : response.body);
   });
 });
 
 // Wyszukiwanie pytań
 searchInput.addEventListener("input", (e) => {
-  const searchTerm = removeDiacritics(e.target.value.toLowerCase())
+  const searchTerm = enableDiacriticsRemoval ? removeDiacritics(e.target.value.toLowerCase()) : e.target.value.toLowerCase();
 
+  lookupPhrase(searchTerm)
+});
+
+const lookupPhrase = (searchTerm) => {
   resultsDiv.innerHTML = "";
 
   if (searchTerm === "") return;
@@ -398,12 +405,12 @@ searchInput.addEventListener("input", (e) => {
     const answerText = enableDiacriticsRemoval ? removeDiacritics(item.question.toLowerCase()) : item.question.toLowerCase();
     return answerText.includes(searchTerm)
   });
-  
+
   if (filteredQuestions.length === 0 && filteredAnswers.length === 0) {
     resultsDiv.innerHTML = "<p>Brak wyników</p>";
     return;
   }
-  
+
   //dodaje do resulta question, a po kliknięciu pokazuje answer
   filteredQuestions.forEach(
     item => {
@@ -421,7 +428,7 @@ searchInput.addEventListener("input", (e) => {
         resultsDiv.appendChild(questionDiv);
       }
   );
-  
+
   //dodaje do resulta answer, a po kliknięciu pokazuje oryginalny question
   filteredAnswers.forEach(
     item =>
@@ -443,4 +450,4 @@ searchInput.addEventListener("input", (e) => {
           resultsDiv.appendChild(answerDiv);
         }
     );
-});
+}
