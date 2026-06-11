@@ -51,3 +51,7 @@ input {
   border-radius: 5px;
   border: 2px solid rgb(80, 80, 80)
 }
+
+.selected {
+  background-color: rgb(80, 80, 80);
+}

@@ -6,6 +6,7 @@ const ENABLE_DIACRITICS_REMOVAL = true;
 
 
 var qaDatabase;
+var selectedQA;
 
 async function getCurrentTab() {
 	let queryOptions = { active: true, lastFocusedWindow: true };
@@ -66,6 +67,13 @@ function lookupPhrase(searchTerm) {
 		questionDiv.className = "question";
 		questionDiv.textContent = item.question;
 		questionDiv.addEventListener("click", () => {
+			if(selectedQA) {
+				selectedQA.classList.remove("selected")
+			}
+
+			questionDiv.classList.add("selected");
+			selectedQA = questionDiv
+
 			//answerText.textContent = item.answer;
 			answerText.innerHTML = item["correct-answers"].map(i => "&#x2022; "+i).join("<hr>");
 			answerContainer.style.display = "block";
@@ -83,6 +91,13 @@ function lookupPhrase(searchTerm) {
 		answerDiv.style.fontStyle = "italic";
 		answerDiv.style.color = "rgb(255, 180, 0)";
 		answerDiv.addEventListener("click", () => {
+			if(selectedQA) {
+				selectedQA.classList.remove("selected")
+			}
+
+			questionDiv.classList.add("selected");
+			selectedQA = questionDiv;
+
 			//answerText.textContent = item.question;
 			answerText.innerHTML = item.question.replace(/\n/g, "<br>");
 			answerContainer.style.display = "block";
