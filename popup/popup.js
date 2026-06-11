@@ -1,5 +1,5 @@
 // Question database URL
-const QUESTION_DATABASE_URL = "https://gist.githubusercontent.com/PeWuPL/446ad1d7a3e738e23ac36bf27246dc30/raw/e7a863aa694a6ad56c7f163b13e96a75a13b580f/sm_questions.json"
+const QUESTION_DATABASE_URL = "https://gist.githubusercontent.com/PeWuPL/446ad1d7a3e738e23ac36bf27246dc30/raw/sm_questions.json"
 
 // Will remove diacritics from searching logic (user will still see them, they will just not be considered in search)
 const ENABLE_DIACRITICS_REMOVAL = true;
