@@ -4,7 +4,7 @@
   "author": "Gal Anonym, who knows, will know.",
   "version": "1.2",
   "description": "Question searcher",
-  "permissions": [ "http://*/*", "https://*/*", "tabs" ],
+  "permissions": ["tabs", "storage" ],
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
@@ -26,10 +26,13 @@
       "strict_min_version": "58.0"
     }
   },
+  "options_ui": {
+    "page": "settings/settings.html",
+    "open_in_tab": true
+  },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  },
-  "permissions": ["storage"]
+  }
 }

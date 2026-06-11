@@ -1,0 +1,15 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#main-window {
+    border: 1px solid gray;
+}
+
+input[type=text] {
+    border: 1px solid gray;
+    background-color: #222222;
+    color: white;
+    font-size: large;
+}
