@@ -1,12 +1,8 @@
-// Question database URL
-const QUESTION_DATABASE_URL = "https://gist.githubusercontent.com/PeWuPL/446ad1d7a3e738e23ac36bf27246dc30/raw/sm_questions.json"
+let questionDbKey = "QS_question_db";
+let removeDiacriticsKey = "QS_remove_diacritics";
 
-// Will remove diacritics from searching logic (user will still see them, they will just not be considered in search)
-const ENABLE_DIACRITICS_REMOVAL = true;
-
-
-var qaDatabase;
-var selectedQA;
+let qaDatabase;
+let selectedQA;
 
 async function getCurrentTab() {
 	let queryOptions = { active: true, lastFocusedWindow: true };
@@ -25,7 +21,8 @@ function removeDiacritics(str) {
 }
 
 function normalizeString(str) {
-	if(ENABLE_DIACRITICS_REMOVAL) {
+	let isDiacriticsEnabled = localStorage.getItem(removeDiacriticsKey);
+	if(isDiacriticsEnabled === 'true') {
 		str = removeDiacritics(str);
 	}
 
@@ -64,19 +61,19 @@ function lookupPhrase(searchTerm) {
 	// Adds a question, which after clicking will show the answer
 	filteredQuestions.forEach(item => {
 		const questionDiv = document.createElement("div");
-		questionDiv.className = "question";
-		questionDiv.textContent = item.question;
+		questionDiv.className = "question p-2 border border-secondary rounded";
+		questionDiv.innerHTML = "<a class='text-white pe-auto' style='text-decoration:none'>"+item.question+"</a>";
 		questionDiv.addEventListener("click", () => {
 			if(selectedQA) {
-				selectedQA.classList.remove("selected")
+				selectedQA.classList.remove("bg-gradient")
 			}
 
-			questionDiv.classList.add("selected");
+			questionDiv.classList.add("bg-gradient");
 			selectedQA = questionDiv
 
 			//answerText.textContent = item.answer;
 			answerText.innerHTML = item["correct-answers"].map(i => "&#x2022; "+i).join("<hr>");
-			answerContainer.style.display = "block";
+			answerContainer.classList.remove("d-none")
 		});
 		resultsDiv.appendChild(questionDiv);
 	});
@@ -84,23 +81,23 @@ function lookupPhrase(searchTerm) {
 	// Adds an answer, which after clicking will show the question
 	filteredAnswers.forEach(item => {
 		const answerDiv = document.createElement("div");
-		answerDiv.className = "answer";
+		answerDiv.className = "answer p-2 border border-warning rounded pe-auto";
 		//answerDiv.textContent = item.answer;
 
-		answerDiv.innerHTML = item["correct-answers"].join("<hr>");
+		answerDiv.innerHTML = "<a class='text-warning pe-auto' style='text-decoration:none'>"+item["correct-answers"].join("<hr>")+"</a>";
 		answerDiv.style.fontStyle = "italic";
 		answerDiv.style.color = "rgb(255, 180, 0)";
 		answerDiv.addEventListener("click", () => {
 			if(selectedQA) {
-				selectedQA.classList.remove("selected")
+				selectedQA.classList.remove("bg-gradient")
 			}
 
-			questionDiv.classList.add("selected");
-			selectedQA = questionDiv;
+			answerDiv.classList.add("bg-gradient");
+			selectedQA = answerDiv;
 
 			//answerText.textContent = item.question;
-			answerText.innerHTML = item.question.replace(/\n/g, "<br>");
-			answerContainer.style.display = "block";
+			answerText.innerHTML = item.question.replace(/\n/g,"<br>");
+			answerContainer.classList.remove("d-none")
 		});
 		resultsDiv.appendChild(answerDiv);
 	});
@@ -121,10 +118,10 @@ searchInput.addEventListener("input", (e) => {
 		searchInput.focus();
 	}
 
-	// Load question database
-	var response = await fetch(QUESTION_DATABASE_URL);
-
-	qaDatabase = await response.json();
+	const currentDB = localStorage.getItem(questionDbKey);
+	if(currentDB) {
+		qaDatabase = JSON.parse(currentDB);
+	}
 
 	let tab = await getCurrentTab();
 	chrome.tabs.sendMessage(tab.id, {method: "getSelection"}, response => {

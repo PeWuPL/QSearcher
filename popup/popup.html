@@ -1,18 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <title>Wyszukiwarka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../common/bootstrap.css">
   <link rel="stylesheet" href="styles.css">
+  <script defer src="../common/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-  <div class="container">
-    <input type="text" id="searchInput" placeholder="Szukaj...">
-    <div id="results"></div>
-    <div id="answerContainer" style="display: none;">
-      <h3>Wynik:</h3>
-      <p id="answerText"></p>
+<body class="bg-dark text-white">
+  <div class="container w-100" style="min-width: 300px;">
+    <fieldset class="container p-2 mb-3 border border-secondary rounded">
+      <legend class="float-none w-auto px-3">Wyszukiwarka</legend>
+      <input type="text" id="searchInput" class="form-control bg-dark text-white" placeholder="Szukaj...">
+    </fieldset>
+    <div id="results" class="overflow-y-scroll"></div>
+
+    <div class="container bg-dark text-white sticky-bottom pb-1">
+      <fieldset id="answerContainer" class="ps-2 mb-2 border border-secondary rounded d-none">
+        <legend class="float-none w-auto px-3">Wynik</legend>
+        <p id="answerText" class="text-white"></p>
+      </fieldset>
     </div>
+
   </div>
   <script src="popup.js"></script>
 </body>

@@ -5,32 +5,15 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../common/bootstrap.css">
+	<link rel="stylesheet" href="settings.css">
 	<!--	<link rel="stylesheet" href="settings.css">-->
 	<script defer src="../common/bootstrap.bundle.min.js"></script>
+	<script defer src="functions.js"></script>
 	<script defer src="settings.js"></script>
 	<title>QSearcher - ustawienia</title>
 </head>
 <body class="container">
 	<!-- MODALS -->
-	<div id="database-loaded-dialog" class="modal" tabindex="-1" role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<p>Modal body text goes here.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary">Save changes</button>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<h1>Ustawienia globalne</h1>
 	<hr>
@@ -39,12 +22,24 @@
 
 		<fieldset class="container mb-3 pb-3 border border-secondary rounded">
 			<legend class="float-none w-auto px-3">Predefiniowane bazy</legend>
-			<div class="card" style="width: 18rem;">
-				<h1 class="card-img-top text-center">Systemy Multimedialne</h1>
-				<div class="card-body">
-					<p class="card-text">Baza pytań do systemów multimedialnych - semestr 6</p>
-					<a href="#" class="btn btn-primary" id="load-sm">Wybierz</a>
+			<div class="row p-3">
+				<div class="card m-1 p-3" style="width: 18rem;">
+					<h5 class="card-title">Systemy Multimedialne</h5>
+					<h6 class="card-subtitle mb-2 text-body-secondary">Semestr 6</h6>
+					<div class="card-body">
+						<p class="card-text">Baza pytań do systemów multimedialnych - semestr 6</p>
+						<a href="#" class="btn btn-primary" id="load-sm">Wybierz</a>
+					</div>
 				</div>
+
+<!--				<div class="card m-1 p-3" style="width: 18rem;">-->
+<!--					<h5 class="card-title">Transmisja danych</h5>-->
+<!--					<h6 class="card-subtitle mb-2 text-body-secondary">Semestr 5</h6>-->
+<!--					<div class="card-body">-->
+<!--						<p class="card-text">Baza pytań do transmisji danych - semestr 5</p>-->
+<!--						<a href="#" class="btn btn-primary" id="load-td">Wybierz</a>-->
+<!--					</div>-->
+<!--				</div>-->
 			</div>
 		</fieldset>
 
@@ -52,11 +47,22 @@
 			<legend class="float-none w-auto px-3">Własna baza</legend>
 
 			<label for="custom-json-url" class="form-label">Ładowanie z URL</label><br>
-			<input type="text" id="custom-json-url" class="form-control" placeholder="https://gist.githubusercontent.com/PeWuPL/446ad1d7a3e738e23ac36bf27246dc30/raw/sm_questions.json" required/>
+			<input type="text" id="custom-json-url" class="form-control" placeholder="https://url.here" required/>
 			<button id="load-custom-json-url" class="btn btn-primary">Pobierz</button>
 			<br><br>
 			<label for="custom-json-body" class="form-label">Ładowanie z JSON</label><br>
-			<input type="text" id="custom-json-body" class="form-control" placeholder="[{'question':'Ala ma', 'incorrect-answers':['mruczka'], 'correct-answers': ['kota']}]" required/>
+			<textarea type="text" id="custom-json-body" class="form-control" placeholder=
+'[
+	{
+		"question": "Ala ma",
+			"incorrect-answers": [
+			"mruczka"
+		],
+		"correct-answers": [
+			"kota"
+		]
+	}
+]' required></textarea>
 			<button id="load-custom-json-body" class="btn btn-primary">Ładuj</button>
 		</fieldset>
 
@@ -64,6 +70,8 @@
 			<legend class="float-none w-auto px-3">Status</legend>
 			<span id="status-all" class="badge text-bg-primary">0</span>
 			<span class="text-primary">Pytań w bazie</span><br>
+			<button id="clear-database" class="btn btn-warning">Wyczyść bazę danych</button>
+
 		</fieldset>
 	</fieldset>
 
@@ -71,8 +79,8 @@
 		<legend class="float-none w-auto px-3">Opcje</legend>
 
 		<div class="form-check">
-			<input class="form-check-input" type="checkbox" id="removeDiacriticsInSearch" checked>
-			<label class="form-check-label" for="removeDiacriticsInSearch">
+			<input class="form-check-input" type="checkbox" id="remove-diacritics-in-search">
+			<label class="form-check-label" for="remove-diacritics-in-search">
 				Zastępuj znaki diakrytyczne znakami ASCII (np. <code>ł</code> -> <code>l</code>)
 			</label>
 		</div>

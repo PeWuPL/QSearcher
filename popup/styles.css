@@ -1,23 +1,7 @@
-*{
-	 background-color: rgb(31, 31, 31);
-	 color: rgb(205, 205, 205);
-}
-
 body {
   scrollbar-color: rgb(80, 80, 80) rgb(51, 51, 51);
   background-color: rgb(31, 31, 31);
-  width: 300px;
-  padding: 10px;
   font-family: Arial, sans-serif; 
-}
-
-input {
-  outline: none;
-  width: 70%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border-radius: 7px;
-  border: 2px solid rgb(80, 80, 80);
 }
 
 #results {
@@ -25,33 +9,10 @@ input {
   overflow-y: auto;
 }
 
-.question {
-  padding: 5px;
-  cursor: pointer;
-  border-bottom: 1px solid rgb(80, 80, 80);
-}
-
 .question:hover {
   background: rgb(51, 51, 51);
 }
 
-.answer {
-  padding: 5px;
-  cursor: pointer;
-  border-bottom: 1px solid rgb(80, 80, 80);
-}
-
 .answer:hover {
   background: rgb(51, 51, 51);
-}
-
-#answerContainer {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px solid rgb(80, 80, 80)
-}
-
-.selected {
-  background-color: rgb(80, 80, 80);
 }
